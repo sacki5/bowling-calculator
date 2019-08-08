@@ -1,0 +1,20 @@
+{
+    "parserOptions": {
+        "parser": "babel-eslint"
+    },
+    "extends": ["airbnb-base", "plugin:vue/recommended"],
+    "rules": {
+        "indent": ["error", 4],
+        "vue/html-indent": ["error", 4]
+    },
+    "settings": {
+        "import/resolver": {
+            "webpack": {
+                "config": "webpack.config.js"
+            }
+        }
+    },
+    "env": {
+        "jest": true
+    }
+}
