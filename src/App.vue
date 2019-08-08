@@ -5,15 +5,16 @@
 </template>
 
 <style lang="scss">
-@import '../config.json';
+
+* {
+    box-sizing: border-box;
+}
 
 #app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     padding: 3rem;
-
-    color: $color;
 }
 
 #nav {

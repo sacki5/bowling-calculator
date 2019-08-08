@@ -2,10 +2,11 @@
     "parserOptions": {
         "parser": "babel-eslint"
     },
-    "extends": ["airbnb-base", "plugin:vue/recommended"],
+    "extends": ["airbnb-base", "plugin:vue/recommended", "plugin:prettier/recommended", "prettier/vue"],
     "rules": {
         "indent": ["error", 4],
-        "vue/html-indent": ["error", 4]
+        "vue/html-indent": ["error", 4],
+        "no-param-reassign": 0,
     },
     "settings": {
         "import/resolver": {
