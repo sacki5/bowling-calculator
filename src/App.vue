@@ -1,8 +1,40 @@
 <template>
     <div id="app">
-        <router-view />
+        <h1>Bowlingcalculator</h1>
+
+        <label>Submit how many pins you knocked down:</label>
+        <score-selector />
+        <score-board />
+        <modal :visible="turn > 9">
+            <h1>Finished!</h1>
+            <img src="/images/winner.svg" width="70%" />
+            <p>
+                Great job! You finished with at score of
+                <strong>{{ score }} points!</strong>
+            </p>
+
+            <button class="success" @click="resetState">Reset</button>
+        </modal>
+        <button @click="resetState">Reset</button>
     </div>
 </template>
+
+<script>
+import { mapState, mapMutations } from 'vuex';
+import scoreSelector from '@/components/scoreSelector';
+import scoreBoard from '@/components/scoreBoard';
+import modal from '@/components/modal';
+
+export default {
+    components: {
+        scoreSelector,
+        scoreBoard,
+        modal,
+    },
+    computed: mapState(['turn', 'score']),
+    methods: mapMutations(['resetState']),
+};
+</script>
 
 <style lang="scss">
 * {

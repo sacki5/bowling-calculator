@@ -1,4 +1,3 @@
-const jsonImporter = require('node-sass-json-importer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const postcssCustomProperties = require('postcss-custom-properties');
@@ -23,12 +22,7 @@ module.exports = {
                 use: [
                     MiniCssExtractPlugin.loader,
                     'css-loader',
-                    {
-                        loader: 'sass-loader',
-                        options: {
-                            importer: jsonImporter(),
-                        },
-                    },
+                    'sass-loader',
                     {
                         loader: 'postcss-loader',
                         options: {

@@ -4,7 +4,7 @@
             v-for="(button, index) in remainingPins + 1"
             :key="index"
             :disabled="turn > 9"
-            @click="add(index)"
+            @click="addRoll(index)"
         >
             {{ index }}
         </button>
@@ -12,22 +12,17 @@
 </template>
 
 <script>
-import store from '@/store';
+import { mapGetters, mapState, mapActions } from 'vuex';
 
 export default {
     computed: {
-        remainingPins() {
-            return store.getters.getRemainingPins;
-        },
-        turn() {
-            return store.state.turn;
-        },
+        ...mapGetters({
+            remainingPins: 'getRemainingPins',
+        }),
+        ...mapState(['turn']),
     },
     methods: {
-        add(score) {
-            // store.commit('addScore', score);
-            store.dispatch('addRoll', score);
-        },
+        ...mapActions(['addRoll']),
     },
 };
 </script>

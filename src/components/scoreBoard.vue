@@ -23,7 +23,7 @@
                     {{ turn.second | bowlingScore(turn.first) }}
                 </div>
                 <div class="thirdScore">
-                    {{ turn.third | bowlingScore }}
+                    {{ turn.third | bowlingScore(turn.second) }}
                 </div>
                 <div class="totalScore">
                     {{ turn.total }}
@@ -44,25 +44,19 @@
 </template>
 
 <script>
-import store from '@/store';
+import { mapState } from 'vuex';
 
 export default {
     filters: {
         bowlingScore(value, oldValue) {
+            if (!value) return null;
             if (value === 10) return 'X';
             if (oldValue + value === 10) return '/';
 
             return value;
         },
     },
-    computed: {
-        score() {
-            return store.state.score;
-        },
-        turnScores() {
-            return store.state.turnScores;
-        },
-    },
+    computed: mapState(['score', 'turnScores']),
 };
 </script>
 
