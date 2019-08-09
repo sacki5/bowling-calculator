@@ -7,7 +7,7 @@
     "scripts": {
         "serve": "webpack-dev-server --mode development --progress",
         "build": "webpack --mode production --progress --hide-modules",
-        "test": "jest",
+        "test": "./node_modules/.bin/jest",
         "lint": "./node_modules/.bin/eslint 'src/*.{js,vue}' --quiet"
     },
     "jest": {
