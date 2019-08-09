@@ -1,21 +1,29 @@
 import store from '..';
 
 test('Test strike + spare + 4|0 equals 38', () => {
-    store.commit('addScore', 10);
-    store.commit('addScore', 9);
-    store.commit('addScore', 1);
-    store.commit('addScore', 4);
-    store.commit('addScore', 0);
+    store.dispatch('addRoll', 10);
+    store.dispatch('addRoll', 9);
+    store.dispatch('addRoll', 1);
+    store.dispatch('addRoll', 4);
+    store.dispatch('addRoll', 0);
 
-    expect(store.state.hdcpScore).toBe(38);
+    expect(store.state.score).toBe(38);
 });
 
-test('Test strike + spare + 4|0 equals 38', () => {
-    store.commit('addScore', 10);
-    store.commit('addScore', 9);
-    store.commit('addScore', 1);
-    store.commit('addScore', 4);
-    store.commit('addScore', 0);
+test('Twelve strikes equals 300 in score', () => {
+    store.commit('resetState');
+    store.dispatch('addRoll', 10);
+    store.dispatch('addRoll', 10);
+    store.dispatch('addRoll', 10);
+    store.dispatch('addRoll', 10);
+    store.dispatch('addRoll', 10);
+    store.dispatch('addRoll', 10);
+    store.dispatch('addRoll', 10);
+    store.dispatch('addRoll', 10);
+    store.dispatch('addRoll', 10);
+    store.dispatch('addRoll', 10);
+    store.dispatch('addRoll', 10);
+    store.dispatch('addRoll', 10);
 
-    expect(store.state.hdcpScore).toBe(38);
+    expect(store.state.score).toBe(300);
 });

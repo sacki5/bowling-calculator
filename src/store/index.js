@@ -3,9 +3,9 @@ import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
-    state: {
-        hdcpScore: 0,
+const getDefaultState = () => {
+    return {
+        score: 0,
         turn: 0,
         turnScores: [
             { first: null, second: null, total: null },
@@ -19,64 +19,158 @@ export default new Vuex.Store({
             { first: null, second: null, total: null },
             { first: null, second: null, third: null, total: null },
         ],
-        rolls: [],
-    },
+    };
+};
+export default new Vuex.Store({
+    state: getDefaultState(),
     mutations: {
-        addScore(state, amount) {
-            if (!state.turnScores[state.turn].first) {
-                if (
-                    state.turn > 1 &&
-                    state.turnScores[state.turn - 1].second === 10 &&
-                    state.turnScores[state.turn - 2].second === 10
-                ) {
-                    state.turnScores[state.turn - 2].total = 10 + 10 + amount;
-                }
+        resetState(state) {
+            Object.assign(state, getDefaultState());
+        },
 
+        /**
+         * Increments the turn
+         * @param {*} state
+         */
+        nextTurn(state) {
+            state.turn += 1;
+        },
+
+        /**
+         * Save the total score on the turn and updates the score
+         * @param {*} state
+         * @param {{offset: number, score: number}} Payload
+         */
+        addTurnScore(state, { offset, score }) {
+            state.turnScores[state.turn - offset].total = state.score + score;
+            state.score = state.turnScores[state.turn - offset].total;
+        },
+    },
+    actions: {
+        /**
+         * @param context
+         * @param {number} amount - Amount of pins knocked down.
+         */
+        addRoll(context, amount) {
+            if (
+                context.state.turnScores[context.state.turn].first &&
+                context.state.turnScores[context.state.turn].second
+            ) {
+                context.state.turnScores[context.state.turn].third = amount;
+                context.commit('addTurnScore', {
+                    offset: 0,
+                    score:
+                        context.state.turnScores[context.state.turn].first +
+                        context.state.turnScores[context.state.turn].second +
+                        context.state.turnScores[context.state.turn].third,
+                });
+
+                context.commit('nextTurn');
+            } else if (!context.state.turnScores[context.state.turn].first) {
+                // If two last turns was a strike save score.
                 if (
-                    state.turn > 0 &&
-                    state.turnScores[state.turn - 1].second !== 10 &&
-                    state.turnScores[state.turn - 1].first +
-                        state.turnScores[state.turn - 1].second ===
+                    context.state.turn > 1 &&
+                    context.state.turnScores[context.state.turn - 1].second ===
+                        10 &&
+                    context.state.turnScores[context.state.turn - 2].second ===
                         10
                 ) {
-                    state.turnScores[state.turn - 1].total = 10 + amount;
+                    context.commit('addTurnScore', {
+                        offset: 2,
+                        score: 10 + 10 + amount,
+                    });
                 }
 
-                if (amount === 10) {
-                    state.turnScores[state.turn].second = 10;
-                    state.turn += 1;
+                // If last turn was a spare save score to last turn
+                if (
+                    context.state.turn > 0 &&
+                    context.state.turnScores[context.state.turn - 1].second !==
+                        10 &&
+                    context.state.turnScores[context.state.turn - 1].first +
+                        context.state.turnScores[context.state.turn - 1]
+                            .second ===
+                        10
+                ) {
+                    context.commit('addTurnScore', {
+                        offset: 1,
+                        score: 10 + amount,
+                    });
+                }
+
+                // If strike save to second roll and go to next turn. Else save to first roll.
+                if (amount === 10 && context.state.turn !== 9) {
+                    context.state.turnScores[context.state.turn].second = 10;
+                    context.commit('nextTurn');
                 } else {
-                    state.turnScores[state.turn].first = amount;
+                    context.state.turnScores[context.state.turn].first = amount;
                 }
             } else {
-                state.turnScores[state.turn].second = amount;
+                // Save second roll result
+                context.state.turnScores[context.state.turn].second = amount;
 
+                // Save turn score if it was no spare
                 if (
-                    state.turnScores[state.turn].first +
-                        state.turnScores[state.turn].second !==
-                    10
+                    context.state.turnScores[context.state.turn].first +
+                        context.state.turnScores[context.state.turn].second !==
+                        10 &&
+                    !(
+                        context.state.turn === 9 &&
+                        context.state.turnScores[context.state.turn].first ===
+                            10
+                    )
                 ) {
-                    state.turnScores[state.turn].total =
-                        state.turnScores[state.turn].first +
-                        state.turnScores[state.turn].second;
+                    context.commit('addTurnScore', {
+                        offset: 0,
+                        score:
+                            context.state.turnScores[context.state.turn].first +
+                            context.state.turnScores[context.state.turn].second,
+                    });
                 }
 
+                // If last turn was a strike
                 if (
-                    state.turn > 0 &&
-                    state.turnScores[state.turn - 1].second === 10
+                    context.state.turn > 0 &&
+                    context.state.turnScores[context.state.turn - 1].second ===
+                        10
                 ) {
-                    state.turnScores[state.turn - 1].total =
-                        10 +
-                        state.turnScores[state.turn].first +
-                        state.turnScores[state.turn].second;
+                    context.commit('addTurnScore', {
+                        offset: 1,
+                        score:
+                            10 +
+                            context.state.turnScores[context.state.turn].first +
+                            context.state.turnScores[context.state.turn].second,
+                    });
                 }
 
-                state.turn += 1;
+                // Go to next turn if no spare or strike on last turn
+                if (
+                    context.state.turn !== 9 ||
+                    (context.state.turn === 9 &&
+                        context.state.turnScores[context.state.turn].first +
+                            context.state.turnScores[context.state.turn]
+                                .second !==
+                            10 &&
+                        context.state.turnScores[context.state.turn].second !==
+                            10 &&
+                        context.state.turnScores[context.state.turn].first !==
+                            10)
+                )
+                    context.commit('nextTurn');
             }
         },
     },
     getters: {
         getRemainingPins(state) {
+            if (
+                state.turn > 9 ||
+                (state.turn === 9 &&
+                    state.turnScores[state.turn].first === 10) ||
+                state.turnScores[state.turn].second === 10 ||
+                state.turnScores[state.turn].first +
+                    state.turnScores[state.turn].second ===
+                    10
+            )
+                return 10;
             return 10 - state.turnScores[state.turn].first;
         },
     },

@@ -32,9 +32,7 @@ module.exports = {
                     {
                         loader: 'postcss-loader',
                         options: {
-                            plugins: () => [
-                                postcssCustomProperties(),
-                            ],
+                            plugins: () => [postcssCustomProperties()],
                         },
                     },
                 ],
@@ -60,8 +58,6 @@ module.exports = {
         new MiniCssExtractPlugin({
             filename: 'style.[hash].css',
         }),
-        new CopyWebpackPlugin([
-            { from: 'src/images', to: 'images' },
-        ]),
+        new CopyWebpackPlugin([{ from: 'src/assets/images', to: 'images' }]),
     ],
 };

@@ -1,41 +1,42 @@
 <template>
-    <div v-if="turnScores.length" class="scoreBoard">
-        <div v-for="(turn, index) in 10" :key="index" class="turn">
+    <div class="scoreBoard">
+        <div v-for="(turn, index) in turnScores" :key="index" class="turn">
             <div class="turnNumber">
-                {{ turn }}
+                {{ index + 1 }}
             </div>
-            <div class="scoreBox">
+            <div v-if="index !== turnScores.length - 1" class="scoreBox">
                 <div class="firstScore">
-                    {{ turnScores[index].first }}
+                    {{ turn.first }}
                 </div>
                 <div class="secondScore">
-                    {{
-                        turnScores[index].second
-                            | bowlingScore(turnScores[index].first)
-                    }}
+                    {{ turn.second | bowlingScore(turn.first) }}
                 </div>
                 <div class="totalScore">
-                    {{ turnScores[index].total }}
+                    {{ turn.total }}
+                </div>
+            </div>
+            <div v-else class="scoreBox last">
+                <div class="firstScore">
+                    {{ turn.first | bowlingScore }}
+                </div>
+                <div class="secondScore">
+                    {{ turn.second | bowlingScore(turn.first) }}
+                </div>
+                <div class="thirdScore">
+                    {{ turn.third | bowlingScore }}
+                </div>
+                <div class="totalScore">
+                    {{ turn.total }}
                 </div>
             </div>
         </div>
         <div class="hdcpScore">
             <div class="turnNumber">
-                Hdcp Score
+                Score
             </div>
             <div class="scoreBox">
                 <div class="totalScore">
-                    {{ hdcpScore }}
-                </div>
-            </div>
-        </div>
-        <div class="maxPossible">
-            <div class="turnNumber">
-                Max possible
-            </div>
-            <div class="scoreBox">
-                <div class="totalScore">
-                    15
+                    {{ score }}
                 </div>
             </div>
         </div>
@@ -55,8 +56,8 @@ export default {
         },
     },
     computed: {
-        hdcpScore() {
-            return store.state.hdcpScore;
+        score() {
+            return store.state.score;
         },
         turnScores() {
             return store.state.turnScores;
@@ -110,6 +111,19 @@ export default {
 
     .totalScore {
         grid-column: span 2;
+    }
+}
+
+.scoreBox.last {
+    grid-template-columns: auto auto auto;
+
+    .thirdScore {
+        border-left: 1px solid grey;
+        border-bottom: 1px solid grey;
+    }
+
+    .totalScore {
+        grid-column: span 3;
     }
 }
 </style>
