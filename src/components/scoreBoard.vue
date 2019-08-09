@@ -70,13 +70,15 @@ export default {
 .scoreBoard {
     width: 80%;
     min-width: 600px;
-    background: #eaeaea;
+    background: rgb(237, 240, 241);
     display: flex;
+    border: 1px solid rgb(76, 105, 124);
+    border-radius: 3px;
     flex-direction: row;
     flex-wrap: wrap;
 
-    & > div {
-        border: 1px solid grey;
+    .turn {
+        border-right: 1px solid rgb(76, 105, 124);
     }
 }
 
@@ -88,9 +90,9 @@ export default {
 .turnNumber {
     width: 100%;
     text-align: center;
-    border-bottom: 2px solid grey;
+    border-bottom: 1px solid rgb(76, 105, 124);
     font-weight: 600;
-    padding: 10px;
+    padding: 5px 10px;
 }
 
 .scoreBox {
@@ -105,8 +107,8 @@ export default {
     }
 
     .secondScore {
-        border-left: 1px solid grey;
-        border-bottom: 1px solid grey;
+        border-left: 1px solid rgb(76, 105, 124);
+        border-bottom: 1px solid rgb(76, 105, 124);
     }
 
     .totalScore {
@@ -118,8 +120,8 @@ export default {
     grid-template-columns: auto auto auto;
 
     .thirdScore {
-        border-left: 1px solid grey;
-        border-bottom: 1px solid grey;
+        border-left: 1px solid rgb(76, 105, 124);
+        border-bottom: 1px solid rgb(76, 105, 124);
     }
 
     .totalScore {

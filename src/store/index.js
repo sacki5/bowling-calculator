@@ -21,6 +21,7 @@ const getDefaultState = () => {
         ],
     };
 };
+
 export default new Vuex.Store({
     state: getDefaultState(),
     mutations: {
@@ -41,9 +42,13 @@ export default new Vuex.Store({
          * @param {*} state
          * @param {{offset: number, score: number}} Payload
          */
-        addTurnScore(state, { offset, score }) {
+        saveScore(state, { offset, score }) {
             state.turnScores[state.turn - offset].total = state.score + score;
             state.score = state.turnScores[state.turn - offset].total;
+        },
+
+        saveRoll(state, { roll, amount }) {
+            state.turnScores[state.turn][roll] = amount;
         },
     },
     actions: {
@@ -56,15 +61,14 @@ export default new Vuex.Store({
                 context.state.turnScores[context.state.turn].first &&
                 context.state.turnScores[context.state.turn].second
             ) {
-                context.state.turnScores[context.state.turn].third = amount;
-                context.commit('addTurnScore', {
+                context.commit('saveRoll', { roll: 'third', amount });
+                context.commit('saveScore', {
                     offset: 0,
                     score:
                         context.state.turnScores[context.state.turn].first +
                         context.state.turnScores[context.state.turn].second +
                         context.state.turnScores[context.state.turn].third,
                 });
-
                 context.commit('nextTurn');
             } else if (!context.state.turnScores[context.state.turn].first) {
                 // If two last turns was a strike save score.
@@ -75,7 +79,7 @@ export default new Vuex.Store({
                     context.state.turnScores[context.state.turn - 2].second ===
                         10
                 ) {
-                    context.commit('addTurnScore', {
+                    context.commit('saveScore', {
                         offset: 2,
                         score: 10 + 10 + amount,
                     });
@@ -91,7 +95,7 @@ export default new Vuex.Store({
                             .second ===
                         10
                 ) {
-                    context.commit('addTurnScore', {
+                    context.commit('saveScore', {
                         offset: 1,
                         score: 10 + amount,
                     });
@@ -99,14 +103,14 @@ export default new Vuex.Store({
 
                 // If strike save to second roll and go to next turn. Else save to first roll.
                 if (amount === 10 && context.state.turn !== 9) {
-                    context.state.turnScores[context.state.turn].second = 10;
+                    context.commit('saveRoll', { roll: 'second', amount });
                     context.commit('nextTurn');
                 } else {
-                    context.state.turnScores[context.state.turn].first = amount;
+                    context.commit('saveRoll', { roll: 'first', amount });
                 }
             } else {
                 // Save second roll result
-                context.state.turnScores[context.state.turn].second = amount;
+                context.commit('saveRoll', { roll: 'second', amount });
 
                 // Save turn score if it was no spare
                 if (
@@ -119,7 +123,7 @@ export default new Vuex.Store({
                             10
                     )
                 ) {
-                    context.commit('addTurnScore', {
+                    context.commit('saveScore', {
                         offset: 0,
                         score:
                             context.state.turnScores[context.state.turn].first +
@@ -127,13 +131,13 @@ export default new Vuex.Store({
                     });
                 }
 
-                // If last turn was a strike
+                // If last turn was a strike and Commit score.
                 if (
                     context.state.turn > 0 &&
                     context.state.turnScores[context.state.turn - 1].second ===
                         10
                 ) {
-                    context.commit('addTurnScore', {
+                    context.commit('saveScore', {
                         offset: 1,
                         score:
                             10 +
@@ -143,6 +147,7 @@ export default new Vuex.Store({
                 }
 
                 // Go to next turn if no spare or strike on last turn
+                // If last turn and no spare or strike is made go to next turn.
                 if (
                     context.state.turn !== 9 ||
                     (context.state.turn === 9 &&

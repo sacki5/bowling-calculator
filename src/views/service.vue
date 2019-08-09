@@ -8,9 +8,10 @@
         <modal :visible="turn > 9">
             <h1>Finished!</h1>
             <img src="/images/winner.svg" width="70%" />
-            <h5>
-                Great job! You finished with at score of {{ score }} points!
-            </h5>
+            <p>
+                Great job! You finished with at score of
+                <strong>{{ score }} points!</strong>
+            </p>
 
             <button class="success" @click="reset">Reset</button>
         </modal>

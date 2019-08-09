@@ -38,11 +38,8 @@ div {
 }
 
 button {
-    padding: 10px;
     border: none;
     color: white;
-    font-weight: 600;
-    border-radius: 3px;
     background: rgb(55, 96, 172);
     margin-right: 5px;
 
