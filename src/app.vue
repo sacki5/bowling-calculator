@@ -2,15 +2,15 @@
     <div id="app">
         <h1>Bowlingcalculator</h1>
 
-        <modal :visible="showStartModal">
+        <modal :visible="!gameStarted">
             <h1>Welcome to the bowling calculator</h1>
             <label>Please enter your name: (optional)</label>
             <br /><input
                 v-model="formName"
                 placeholder="Your name here"
-                @keydown.enter="startGame"
+                @keydown.enter="start"
             /><br />
-            <button class="success" @click="startGame">
+            <button class="success" @click="start">
                 Start bowling!
             </button>
         </modal>
@@ -56,15 +56,14 @@ export default {
     data() {
         return {
             formName: null,
-            showStartModal: true,
         };
     },
-    computed: mapState(['turn', 'score', 'name']),
+    computed: mapState(['turn', 'score', 'name', 'gameStarted']),
     methods: {
-        ...mapMutations(['resetState', 'saveName']),
-        startGame() {
-            this.showStartModal = false;
+        ...mapMutations(['resetState', 'saveName', 'startGame']),
+        start() {
             this.saveName(this.formName);
+            this.startGame();
         },
     },
 };

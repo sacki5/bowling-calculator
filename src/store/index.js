@@ -8,6 +8,7 @@ Vue.use(Vuex);
 
 const getDefaultState = () => {
     return {
+        gameStarted: false,
         name: null,
         score: 0,
         turn: 0,
