@@ -9,7 +9,7 @@
         "build": "webpack --mode production --progress --hide-modules",
         "start": "node server.js",
         "test": "./node_modules/.bin/jest",
-        "lint": "./node_modules/.bin/eslint 'src/*.{js,vue}' --quiet"
+        "lint": "./node_modules/.bin/eslint 'src/*.{js,vue}'"
     },
     "jest": {
         "moduleFileExtensions": [
