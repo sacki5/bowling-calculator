@@ -4,6 +4,7 @@ export default {
      * @param {number} amount - Amount of pins knocked down.
      */
     addRoll(context, amount) {
+        // When the third roll is rolled on the ninth turn Save roll and score.
         if (
             context.state.turnScores[context.state.turn].first &&
             context.state.turnScores[context.state.turn].second
@@ -17,7 +18,12 @@ export default {
                     context.state.turnScores[context.state.turn].third,
             });
             context.commit('nextTurn');
-        } else if (!context.state.turnScores[context.state.turn].first) {
+
+            return;
+        }
+
+        // If it's the first roll this turn
+        if (!context.state.turnScores[context.state.turn].first) {
             // If two last turns was a strike save score.
             if (
                 context.state.turn > 1 &&
@@ -53,55 +59,55 @@ export default {
             } else {
                 context.commit('saveRoll', { roll: 'first', amount });
             }
-        } else {
-            // Save second roll result
-            context.commit('saveRoll', { roll: 'second', amount });
 
-            // Save turn score if it was no spare
-            if (
+            return;
+        }
+
+        // Code runs when it's the second roll this turn
+        context.commit('saveRoll', { roll: 'second', amount });
+
+        // If no spare it saves the total score to this turns score.
+        if (
+            context.state.turnScores[context.state.turn].first +
+                context.state.turnScores[context.state.turn].second !==
+                10 &&
+            !(
+                context.state.turn === 9 &&
+                context.state.turnScores[context.state.turn].first === 10
+            )
+        ) {
+            context.commit('saveScore', {
+                offset: 0,
+                score:
+                    context.state.turnScores[context.state.turn].first +
+                    context.state.turnScores[context.state.turn].second,
+            });
+        }
+
+        // If last turn was a strike and save score on last turns total.
+        if (
+            context.state.turn > 0 &&
+            context.state.turnScores[context.state.turn - 1].second === 10
+        ) {
+            context.commit('saveScore', {
+                offset: 1,
+                score:
+                    10 +
+                    context.state.turnScores[context.state.turn].first +
+                    context.state.turnScores[context.state.turn].second,
+            });
+        }
+
+        // If it's not the last turn or it is the last turn and no strike or spare is made go to next turn.
+        if (
+            context.state.turn !== 9 ||
+            (context.state.turn === 9 &&
                 context.state.turnScores[context.state.turn].first +
                     context.state.turnScores[context.state.turn].second !==
                     10 &&
-                !(
-                    context.state.turn === 9 &&
-                    context.state.turnScores[context.state.turn].first === 10
-                )
-            ) {
-                context.commit('saveScore', {
-                    offset: 0,
-                    score:
-                        context.state.turnScores[context.state.turn].first +
-                        context.state.turnScores[context.state.turn].second,
-                });
-            }
-
-            // If last turn was a strike and Commit score.
-            if (
-                context.state.turn > 0 &&
-                context.state.turnScores[context.state.turn - 1].second === 10
-            ) {
-                context.commit('saveScore', {
-                    offset: 1,
-                    score:
-                        10 +
-                        context.state.turnScores[context.state.turn].first +
-                        context.state.turnScores[context.state.turn].second,
-                });
-            }
-
-            // Go to next turn if no spare or strike on last turn
-            // If last turn and no spare or strike is made go to next turn.
-            if (
-                context.state.turn !== 9 ||
-                (context.state.turn === 9 &&
-                    context.state.turnScores[context.state.turn].first +
-                        context.state.turnScores[context.state.turn].second !==
-                        10 &&
-                    context.state.turnScores[context.state.turn].second !==
-                        10 &&
-                    context.state.turnScores[context.state.turn].first !== 10)
-            )
-                context.commit('nextTurn');
-        }
+                context.state.turnScores[context.state.turn].second !== 10 &&
+                context.state.turnScores[context.state.turn].first !== 10)
+        )
+            context.commit('nextTurn');
     },
 };
