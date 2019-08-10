@@ -1,5 +1,13 @@
 export default {
     /**
+     * Starts the game
+     * @param {*} state
+     */
+    startGame(state) {
+        state.gameStarted = true;
+    },
+
+    /**
      * Increments the turn
      * @param {*} state
      */
