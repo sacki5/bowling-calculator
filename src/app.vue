@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <h1>Bowlingcalculator</h1>
+        <h1>Bowlingcalculator 5345345</h1>
 
         <modal :visible="showStartModal">
             <h1>Welcome to the bowling calculator</h1>
