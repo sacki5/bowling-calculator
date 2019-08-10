@@ -3,3 +3,6 @@ cache:
   yarn: true
 node_js:
   - "10"
+script:
+  - "yarn lint"
+  - "yarn test"
