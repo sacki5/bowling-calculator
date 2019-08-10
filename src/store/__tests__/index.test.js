@@ -70,6 +70,6 @@ describe('getters', () => {
         store.dispatch('addRoll', 10);
         store.dispatch('addRoll', 10);
         store.dispatch('addRoll', 10);
-        expect(store.getters.getRemainingPins).toBe(11);
+        expect(store.getters.getRemainingPins).toBe(10);
     });
 });
