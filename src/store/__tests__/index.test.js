@@ -73,3 +73,17 @@ describe('getters', () => {
         expect(store.getters.getRemainingPins).toBe(10);
     });
 });
+
+describe('mutations', () => {
+    test('startGame', () => {
+        store.commit('resetState');
+        store.commit('startGame');
+        expect(store.state.gameStarted).toBe(true);
+    });
+
+    test('saveName', () => {
+        store.commit('resetState');
+        store.commit('saveName', 'John Doe');
+        expect(store.state.name).toBe('John Doe');
+    });
+});
