@@ -1,32 +1,37 @@
 <template>
     <div class="scoreBoard">
-        <div v-for="(turn, index) in turnScores" :key="index" class="turn">
+        <div
+            v-for="(turnScore, index) in turnScores"
+            :key="index"
+            class="turn"
+            :class="{ active: index === turn }"
+        >
             <div class="turnNumber">
                 {{ index + 1 }}
             </div>
             <div v-if="index !== turnScores.length - 1" class="scoreBox">
                 <div class="firstScore">
-                    {{ turn.first }}
+                    {{ turnScore.first }}
                 </div>
                 <div class="secondScore">
-                    {{ turn.second | bowlingScore(turn.first) }}
+                    {{ turnScore.second | bowlingScore(turnScore.first) }}
                 </div>
                 <div class="totalScore">
-                    {{ turn.total }}
+                    {{ turnScore.total }}
                 </div>
             </div>
             <div v-else class="scoreBox last">
                 <div class="firstScore">
-                    {{ turn.first | bowlingScore }}
+                    {{ turnScore.first | bowlingScore }}
                 </div>
                 <div class="secondScore">
-                    {{ turn.second | bowlingScore(turn.first) }}
+                    {{ turnScore.second | bowlingScore(turnScore.first) }}
                 </div>
                 <div class="thirdScore">
-                    {{ turn.third | bowlingScore(turn.second) }}
+                    {{ turnScore.third | bowlingScore(turnScore.second) }}
                 </div>
                 <div class="totalScore">
-                    {{ turn.total }}
+                    {{ turnScore.total }}
                 </div>
             </div>
         </div>
@@ -56,7 +61,7 @@ export default {
             return value;
         },
     },
-    computed: mapState(['score', 'turnScores']),
+    computed: mapState(['score', 'turnScores', 'turn']),
 };
 </script>
 
@@ -79,6 +84,10 @@ export default {
 .turn {
     flex-basis: 100%;
     flex: 1;
+
+    &.active {
+        background: rgb(198, 211, 219);
+    }
 }
 
 .turnNumber {

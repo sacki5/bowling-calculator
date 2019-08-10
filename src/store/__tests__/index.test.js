@@ -27,3 +27,16 @@ test('Twelve strikes equals 300 in score', () => {
 
     expect(store.state.score).toBe(300);
 });
+
+test('Test roll with both spare ands strikes', () => {
+    store.commit('resetState');
+    store.dispatch('addRoll', 5);
+    store.dispatch('addRoll', 4);
+    store.dispatch('addRoll', 5);
+    store.dispatch('addRoll', 5);
+    store.dispatch('addRoll', 10);
+    store.dispatch('addRoll', 5);
+    store.dispatch('addRoll', 4);
+
+    expect(store.state.score).toBe(57);
+});

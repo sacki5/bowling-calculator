@@ -25,4 +25,12 @@ export default {
     saveRoll(state, { roll, amount }) {
         state.turnScores[state.turn][roll] = amount;
     },
+
+    /**
+     * @param {*} state
+     * @param {String} name - Players name
+     */
+    saveName(state, name) {
+        state.name = name;
+    },
 };

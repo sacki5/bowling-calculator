@@ -2,9 +2,28 @@
     <div id="app">
         <h1>Bowlingcalculator</h1>
 
+        <modal :visible="showStartModal">
+            <h1>Welcome to the bowling calculator</h1>
+            <label>Please enter your name: (optional)</label>
+            <br /><input
+                v-model="formName"
+                placeholder="Your name here"
+                @keydown.enter="startGame"
+            /><br />
+            <button class="success" @click="startGame">
+                Start bowling!
+            </button>
+        </modal>
+
         <label>Submit how many pins you knocked down:</label>
+
         <score-selector />
+
+        <label v-if="name">Player: {{ name }}</label>
         <score-board />
+
+        <button @click="resetState">Reset</button>
+
         <modal :visible="turn > 9">
             <h1>Finished!</h1>
             <img src="/images/winner.svg" width="70%" />
@@ -15,7 +34,8 @@
 
             <button class="success" @click="resetState">Reset</button>
         </modal>
-        <button @click="resetState">Reset</button>
+
+        <footer-component />
     </div>
 </template>
 
@@ -24,15 +44,29 @@ import { mapState, mapMutations } from 'vuex';
 import scoreSelector from '@/components/scoreSelector';
 import scoreBoard from '@/components/scoreBoard';
 import modal from '@/components/modal';
+import footerComponent from '@/components/footerComponent';
 
 export default {
     components: {
+        footerComponent,
         scoreSelector,
         scoreBoard,
         modal,
     },
-    computed: mapState(['turn', 'score']),
-    methods: mapMutations(['resetState']),
+    data() {
+        return {
+            formName: null,
+            showStartModal: true,
+        };
+    },
+    computed: mapState(['turn', 'score', 'name']),
+    methods: {
+        ...mapMutations(['resetState', 'saveName']),
+        startGame() {
+            this.showStartModal = false;
+            this.saveName(this.formName);
+        },
+    },
 };
 </script>
 
@@ -73,5 +107,13 @@ button {
         border-color: rgb(70, 194, 70);
         color: white;
     }
+}
+
+input {
+    padding: 10px;
+    border-radius: 3px;
+    border: 1px solid #dddddd;
+    width: 60%;
+    margin: 10px 0;
 }
 </style>
