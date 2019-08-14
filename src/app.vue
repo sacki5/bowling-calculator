@@ -81,18 +81,6 @@ export default {
     padding: 3rem;
 }
 
-#nav {
-    a {
-        font-weight: bold;
-        color: var(--color-green);
-        margin-right: 1rem;
-
-        &.router-link-exact-active {
-            color: #42b983;
-        }
-    }
-}
-
 button {
     background: rgb(231, 231, 231);
     border: 1px solid rgb(199, 199, 199);
