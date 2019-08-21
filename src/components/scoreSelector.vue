@@ -4,7 +4,7 @@
             v-for="(button, index) in remainingPins + 1"
             :key="index"
             :disabled="turn > 9"
-            @click="addRoll(index)"
+            @click="$emit('roll', index)"
         >
             {{ index }}
         </button>
@@ -12,17 +12,10 @@
 </template>
 
 <script>
-import { mapGetters, mapState, mapActions } from 'vuex';
-
 export default {
-    computed: {
-        ...mapGetters({
-            remainingPins: 'getRemainingPins',
-        }),
-        ...mapState(['turn']),
-    },
-    methods: {
-        ...mapActions(['addRoll']),
+    props: {
+        turn: { type: Number, required: true },
+        remainingPins: { type: Number, required: true },
     },
 };
 </script>

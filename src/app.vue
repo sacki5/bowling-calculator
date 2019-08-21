@@ -3,36 +3,24 @@
         <h1>Bowlingcalculator</h1>
 
         <modal :visible="!gameStarted">
-            <h1>Welcome to the bowling calculator</h1>
-            <label>Please enter your name: (optional)</label>
-            <br /><input
-                v-model="formName"
-                placeholder="Your name here"
-                @keydown.enter="start"
-            /><br />
-            <button class="success" @click="start">
-                Start bowling!
-            </button>
+            <welcome-modal @start="start" />
         </modal>
 
         <label>Submit how many pins you knocked down:</label>
 
-        <score-selector />
+        <score-selector
+            :turn="turn"
+            :remaining-pins="getRemainingPins"
+            @roll="addRoll"
+        />
 
         <label v-if="name">Player: {{ name }}</label>
-        <score-board />
+        <score-board :turn="turn" :turn-scores="turnScores" :score="score" />
 
         <button @click="resetState">Reset</button>
 
         <modal :visible="turn > 9">
-            <h1>Finished!</h1>
-            <img src="/images/winner.svg" width="70%" />
-            <p>
-                Great job! You finished with at score of
-                <strong>{{ score }} points!</strong>
-            </p>
-
-            <button class="success" @click="resetState">Reset</button>
+            <congratulation-modal @reset="resetState" />
         </modal>
 
         <footer-component />
@@ -40,11 +28,13 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex';
+import { mapState, mapGetters, mapActions, mapMutations } from 'vuex';
 import scoreSelector from '@/components/scoreSelector';
 import scoreBoard from '@/components/scoreBoard';
 import modal from '@/components/modal';
 import footerComponent from '@/components/footerComponent';
+import congratulationModal from '@/components/congratulationModal';
+import welcomeModal from '@/components/welcomeModal';
 
 export default {
     components: {
@@ -52,17 +42,18 @@ export default {
         scoreSelector,
         scoreBoard,
         modal,
+        congratulationModal,
+        welcomeModal,
     },
-    data() {
-        return {
-            formName: null,
-        };
+    computed: {
+        ...mapGetters(['getRemainingPins']),
+        ...mapState(['turn', 'turnScores', 'score', 'name', 'gameStarted']),
     },
-    computed: mapState(['turn', 'score', 'name', 'gameStarted']),
     methods: {
         ...mapMutations(['resetState', 'saveName', 'startGame']),
-        start() {
-            this.saveName(this.formName);
+        ...mapActions(['addRoll']),
+        start(name) {
+            this.saveName(name);
             this.startGame();
         },
     },

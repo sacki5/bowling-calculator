@@ -49,8 +49,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-
 export default {
     filters: {
         bowlingScore(value, oldValue) {
@@ -61,7 +59,11 @@ export default {
             return value;
         },
     },
-    computed: mapState(['score', 'turnScores', 'turn']),
+    props: {
+        score: { type: Number, required: true },
+        turnScores: { type: Array, required: true },
+        turn: { type: Number, required: true },
+    },
 };
 </script>
 
