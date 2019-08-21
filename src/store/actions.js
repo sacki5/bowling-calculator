@@ -1,5 +1,28 @@
 export default {
     /**
+     * @param {*} context
+     */
+    reset(context) {
+        context.commit('resetState');
+    },
+
+    /**
+     * @param {*} context
+     * @param {String} name
+     */
+    saveName(context, name) {
+        context.commit('saveName', name);
+    },
+
+    /**
+     * @param {*} context
+     * @param {*} amount
+     */
+    startGame(context) {
+        context.commit('setGameStarted', true);
+    },
+
+    /**
      * @param context
      * @param {number} amount - Amount of pins knocked down.
      */

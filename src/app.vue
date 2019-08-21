@@ -17,10 +17,10 @@
         <label v-if="name">Player: {{ name }}</label>
         <score-board :turn="turn" :turn-scores="turnScores" :score="score" />
 
-        <button @click="resetState">Reset</button>
+        <button @click="reset">Reset</button>
 
         <modal :visible="turn > 9">
-            <congratulation-modal @reset="resetState" />
+            <congratulation-modal :score="score" @reset="reset" />
         </modal>
 
         <footer-component />
@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions, mapMutations } from 'vuex';
+import { mapState, mapGetters, mapActions } from 'vuex';
 import scoreSelector from '@/components/scoreSelector';
 import scoreBoard from '@/components/scoreBoard';
 import modal from '@/components/modal';
@@ -50,8 +50,7 @@ export default {
         ...mapState(['turn', 'turnScores', 'score', 'name', 'gameStarted']),
     },
     methods: {
-        ...mapMutations(['resetState', 'saveName', 'startGame']),
-        ...mapActions(['addRoll']),
+        ...mapActions(['addRoll', 'reset', 'saveName', 'startGame']),
         start(name) {
             this.saveName(name);
             this.startGame();

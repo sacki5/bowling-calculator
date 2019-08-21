@@ -10,3 +10,11 @@
         <button class="success" @click="$emit('reset')">Reset</button>
     </div>
 </template>
+
+<script>
+export default {
+    props: {
+        score: { type: Number, required: true },
+    },
+};
+</script>
