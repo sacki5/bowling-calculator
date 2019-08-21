@@ -11,10 +11,17 @@
             </div>
             <div v-if="index !== turnScores.length - 1" class="scoreBox">
                 <div class="firstScore">
-                    {{ turnScore.first }}
+                    <span v-if="turnScore.first !== 10">{{
+                        turnScore.first
+                    }}</span>
                 </div>
                 <div class="secondScore">
-                    {{ turnScore.second | bowlingScore(turnScore.first) }}
+                    <span v-if="turnScore.first === 10">
+                        {{ turnScore.first | bowlingScore(turnScore.first) }}
+                    </span>
+                    <span v-else>
+                        {{ turnScore.second | bowlingScore(turnScore.first) }}
+                    </span>
                 </div>
                 <div class="totalScore">
                     {{ turnScore.total }}

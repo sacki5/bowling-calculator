@@ -18,4 +18,78 @@ export default {
 
         return 10 - state.turnScores[state.turn].first;
     },
+
+    /**
+     * @param {*} state
+     * @return {Boolean}
+     */
+    prevTurnWasStrike(state) {
+        return state.turn > 0 && state.turnScores[state.turn - 1].first === 10;
+    },
+
+    /**
+     * @param {*} state
+     * @return {Boolean}
+     */
+    prevTurnWasSpare(state) {
+        return (
+            state.turn > 0 &&
+            state.turnScores[state.turn - 1].second !== 10 &&
+            state.turnScores[state.turn - 1].first +
+                state.turnScores[state.turn - 1].second ===
+                10
+        );
+    },
+
+    /**
+     * @param {*} state
+     * @return {Boolean}
+     */
+    prevTwoWasStrike(state) {
+        return (
+            state.turn > 1 &&
+            state.turnScores[state.turn - 1].first === 10 &&
+            state.turnScores[state.turn - 2].first === 10
+        );
+    },
+
+    /**
+     * @param {*} state
+     * @return {Boolean}
+     */
+    isSpare(state) {
+        return (
+            state.turnScores[state.turn].first +
+                state.turnScores[state.turn].second !==
+                10 &&
+            !(state.turn === 9 && state.turnScores[state.turn].first === 10)
+        );
+    },
+
+    /**
+     * @param {*} state
+     * @return {Boolean}
+     */
+    shouldGoToNextTurn(state) {
+        return (
+            state.turn !== 9 ||
+            (state.turn === 9 &&
+                state.turnScores[state.turn].first +
+                    state.turnScores[state.turn].second !==
+                    10 &&
+                state.turnScores[state.turn].second !== 10 &&
+                state.turnScores[state.turn].first !== 10)
+        );
+    },
+
+    /**
+     * @param {*} state
+     * @return {Boolean}
+     */
+    isLastRoll(state) {
+        return (
+            state.turnScores[state.turn].first &&
+            state.turnScores[state.turn].second
+        );
+    },
 };

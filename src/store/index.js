@@ -30,11 +30,11 @@ const getDefaultState = () => {
 export default new Vuex.Store({
     state: getDefaultState(),
     getters,
+    actions,
     mutations: {
         resetState(state) {
             Object.assign(state, getDefaultState());
         },
         ...mutations,
     },
-    actions,
 });
