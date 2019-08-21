@@ -21,8 +21,8 @@ export default {
      * @param {{offset: number, score: number}} payload
      */
     saveScore(state, { offset, score }) {
-        state.turnScores[state.turn - offset].total = state.score + score;
-        state.score = state.turnScores[state.turn - offset].total;
+        state.turnScores[state.turn + offset].total = state.score + score;
+        state.score = state.turnScores[state.turn + offset].total;
     },
 
     /**

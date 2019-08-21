@@ -34,7 +34,7 @@ export default {
     prevTurnWasSpare(state) {
         return (
             state.turn > 0 &&
-            state.turnScores[state.turn - 1].second !== 10 &&
+            state.turnScores[state.turn - 1].first !== 10 &&
             state.turnScores[state.turn - 1].first +
                 state.turnScores[state.turn - 1].second ===
                 10
@@ -57,7 +57,7 @@ export default {
      * @param {*} state
      * @return {Boolean}
      */
-    isSpare(state) {
+    isNoSpare(state) {
         return (
             state.turnScores[state.turn].first +
                 state.turnScores[state.turn].second !==
@@ -87,7 +87,7 @@ export default {
      * @return {Boolean}
      */
     isLastRoll(state) {
-        return (
+        return !!(
             state.turnScores[state.turn].first &&
             state.turnScores[state.turn].second
         );

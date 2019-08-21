@@ -47,14 +47,14 @@ export default {
 
             if (context.getters.prevTwoWasStrike) {
                 context.commit('saveScore', {
-                    offset: 2,
+                    offset: -2,
                     score: 10 + 10 + amount,
                 });
             }
 
             if (context.getters.prevTurnWasSpare) {
                 context.commit('saveScore', {
-                    offset: 1,
+                    offset: -1,
                     score: 10 + amount,
                 });
             }
@@ -68,20 +68,20 @@ export default {
 
         context.commit('saveRoll', { roll: 'second', amount });
 
-        if (context.getters.isSpare) {
+        if (context.getters.prevTurnWasStrike) {
             context.commit('saveScore', {
-                offset: 0,
+                offset: -1,
                 score:
+                    10 +
                     context.state.turnScores[context.state.turn].first +
                     context.state.turnScores[context.state.turn].second,
             });
         }
 
-        if (context.getters.prevTurnWasStrike) {
+        if (context.getters.isNoSpare) {
             context.commit('saveScore', {
-                offset: 1,
+                offset: 0,
                 score:
-                    10 +
                     context.state.turnScores[context.state.turn].first +
                     context.state.turnScores[context.state.turn].second,
             });

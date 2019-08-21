@@ -9,7 +9,10 @@
             <div class="turnNumber">
                 {{ index + 1 }}
             </div>
-            <score-box :turn-score="turnScore" />
+            <score-box
+                :last="index === turnScores.length - 1"
+                :turn-score="turnScore"
+            />
         </div>
         <div class="hdcpScore">
             <div class="turnNumber">

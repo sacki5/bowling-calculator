@@ -5,7 +5,7 @@
         </div>
         <div class="secondScore">
             <span v-if="turnScore.first === 10">
-                {{ turnScore.first | bowlingScore(turnScore.first) }}
+                {{ turnScore.first | bowlingScore() }}
             </span>
             <span v-else>
                 {{ turnScore.second | bowlingScore(turnScore.first) }}
@@ -35,7 +35,7 @@
 export default {
     filters: {
         bowlingScore(value, oldValue) {
-            if (!value) return null;
+            if (!value && value !== 0) return null;
             if (value === 10) return 'X';
             if (oldValue + value === 10) return '/';
 

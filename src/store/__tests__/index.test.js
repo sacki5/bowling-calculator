@@ -77,7 +77,7 @@ describe('getters', () => {
 describe('mutations', () => {
     test('startGame', () => {
         store.commit('resetState');
-        store.commit('startGame');
+        store.commit('setGameStarted', true);
         expect(store.state.gameStarted).toBe(true);
     });
 
