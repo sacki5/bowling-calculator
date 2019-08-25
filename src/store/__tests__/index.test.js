@@ -30,7 +30,7 @@ describe('Actions', () => {
     });
 
     test('Test roll with both spare ands strikes', () => {
-        store.commit('resetState');
+        store.dispatch('reset');
         store.dispatch('addRoll', 5);
         store.dispatch('addRoll', 4);
         store.dispatch('addRoll', 5);
@@ -40,6 +40,18 @@ describe('Actions', () => {
         store.dispatch('addRoll', 4);
 
         expect(store.state.score).toBe(57);
+    });
+
+    test('saveName', () => {
+        store.dispatch('reset');
+        store.dispatch('saveName', 'John Doe');
+        expect(store.state.name).toBe('John Doe');
+    });
+
+    test('startGame', () => {
+        store.dispatch('reset');
+        store.dispatch('startGame');
+        expect(store.state.gameStarted).toBe(true);
     });
 });
 
@@ -71,19 +83,5 @@ describe('getters', () => {
         store.dispatch('addRoll', 10);
         store.dispatch('addRoll', 10);
         expect(store.getters.getRemainingPins).toBe(10);
-    });
-});
-
-describe('mutations', () => {
-    test('startGame', () => {
-        store.commit('resetState');
-        store.commit('setGameStarted', true);
-        expect(store.state.gameStarted).toBe(true);
-    });
-
-    test('saveName', () => {
-        store.commit('resetState');
-        store.commit('saveName', 'John Doe');
-        expect(store.state.name).toBe('John Doe');
     });
 });
